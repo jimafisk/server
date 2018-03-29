@@ -52,7 +52,7 @@
 			</template>
 		</div>
 
-		<p>
+		<p v-if="withSettings">
 			<label for="release-channel">{{ t('updatenotification', 'Update channel:') }}</label>
 			<select id="release-channel" v-model="currentChannel" @change="changeReleaseChannel">
 				<option v-for="channel in channels" :value="channel">{{channel}}</option>
@@ -62,13 +62,13 @@
 			<em>{{ t('updatenotification', 'Note that after a new release it can take some time before it shows up here. We roll out new versions spread out over time to our users and sometimes skip a version when issues are found.') }}</em>
 		</p>
 
-		<p class="channel-description">
+		<p class="channel-description" v-if="withSettings">>
 			<span v-html="productionInfoString"></span><br>
 			<span v-html="stableInfoString"></span><br>
 			<span v-html="betaInfoString"></span>
 		</p>
 
-		<p id="oca_updatenotification_groups">
+		<p id="oca_updatenotification_groups" v-if="withSettings">>
 			{{ t('updatenotification', 'Notify members of the following groups about available updates:') }}
 			<v-select multiple :value="notifyGroups" :options="availableGroups"></v-select><br />
 			<em v-if="currentChannel === 'daily' || currentChannel === 'git'">{{ t('updatenotification', 'Only notification for app updates are available.') }}</em>
@@ -100,6 +100,7 @@
 				availableGroups: [],
 				isDefaultUpdateServerURL: true,
 				enableChangeWatcher: false,
+				withSettings: false,
 
 				availableAppUpdates: [],
 				missingAppUpdates: [],

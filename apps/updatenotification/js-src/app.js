@@ -49,6 +49,7 @@ define(function (require) {
 			this.vm.notifyGroups = data.notifyGroups;
 			this.vm.isDefaultUpdateServerURL = data.isDefaultUpdateServerURL;
 			this.vm.versionIsEol = data.versionIsEol;
+			this.vm.withSettings = data.withSettings;
 		}
 	};
 });

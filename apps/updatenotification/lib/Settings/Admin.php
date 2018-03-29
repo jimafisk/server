@@ -98,10 +98,12 @@ class Admin implements ISettings {
 			'isDefaultUpdateServerURL' => $updateServerURL === $defaultUpdateServerURL,
 			'updateServerURL' => $updateServerURL,
 			'notifyGroups' => $this->getSelectedGroups($notifyGroups),
+			'withSettings' => true,
 		];
 
 		$params = [
 			'json' => json_encode($params),
+			'withSettings' => true,
 		];
 
 		return new TemplateResponse('updatenotification', 'admin', $params, '');
@@ -141,6 +143,6 @@ class Admin implements ISettings {
 	 * E.g.: 70
 	 */
 	public function getPriority(): int {
-		return 1;
+		return 90;
 	}
 }
