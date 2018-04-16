@@ -55,7 +55,7 @@ class RootCollection extends SimpleCollection {
 		);
 		$groupPrincipalBackend = new GroupPrincipalBackend($groupManager);
 		// as soon as debug mode is enabled we allow listing of principals
-		$disableListing = !$config->getSystemValue('debug', false);
+		$disableListing = false; //!$config->getSystemValue('debug', false);
 
 		// setup the first level of the dav tree
 		$userPrincipals = new Collection($userPrincipalBackend, 'principals/users');
