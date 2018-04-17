@@ -64,6 +64,15 @@ class Admin implements ISettings {
 	 * @return TemplateResponse
 	 */
 	public function getForm(): TemplateResponse {
+		$params = [
+			'json' => json_encode($this->getFormParams(true)),
+			'withSettings' => true,
+		];
+
+		return new TemplateResponse('updatenotification', 'admin', $params, '');
+	}
+
+	protected function getFormParams($withSettings = true): array {
 		$lastUpdateCheckTimestamp = $this->config->getAppValue('core', 'lastupdatedat');
 		$lastUpdateCheck = $this->dateTimeFormatter->formatDateTime($lastUpdateCheckTimestamp);
 
@@ -85,7 +94,7 @@ class Admin implements ISettings {
 		$defaultUpdateServerURL = 'https://updates.nextcloud.com/updater_server/';
 		$updateServerURL = $this->config->getSystemValue('updater.server.url', $defaultUpdateServerURL);
 
-		$params = [
+		return [
 			'isNewVersionAvailable' => !empty($updateState['updateAvailable']),
 			'isUpdateChecked' => $lastUpdateCheckTimestamp > 0,
 			'lastChecked' => $lastUpdateCheck,
@@ -98,15 +107,8 @@ class Admin implements ISettings {
 			'isDefaultUpdateServerURL' => $updateServerURL === $defaultUpdateServerURL,
 			'updateServerURL' => $updateServerURL,
 			'notifyGroups' => $this->getSelectedGroups($notifyGroups),
-			'withSettings' => true,
+			'withSettings' => $withSettings,
 		];
-
-		$params = [
-			'json' => json_encode($params),
-			'withSettings' => true,
-		];
-
-		return new TemplateResponse('updatenotification', 'admin', $params, '');
 	}
 
 	/**

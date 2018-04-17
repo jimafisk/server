@@ -37,15 +37,15 @@ use Test\TestCase;
 
 class AdminTest extends TestCase {
 	/** @var Admin */
-	private $admin;
+	protected $admin;
 	/** @var IConfig|\PHPUnit_Framework_MockObject_MockObject */
-	private $config;
+	protected $config;
 	/** @var UpdateChecker|\PHPUnit_Framework_MockObject_MockObject */
-	private $updateChecker;
+	protected $updateChecker;
 	/** @var IGroupManager|\PHPUnit_Framework_MockObject_MockObject */
-	private $groupManager;
+	protected $groupManager;
 	/** @var IDateTimeFormatter|\PHPUnit_Framework_MockObject_MockObject */
-	private $dateTimeFormatter;
+	protected $dateTimeFormatter;
 
 	public function setUp() {
 		parent::setUp();
@@ -63,7 +63,10 @@ class AdminTest extends TestCase {
 		);
 	}
 
-	public function testGetFormWithUpdate() {
+	/**
+	 * @return array with expected result
+	 */
+	public function mockFormParams($withSettings = true): array {
 		$channels = [
 			'daily',
 			'beta',
@@ -115,7 +118,7 @@ class AdminTest extends TestCase {
 			->with('admin')
 			->willReturn($group);
 
-		$params = [
+		return [
 			'json' => json_encode([
 				'isNewVersionAvailable' => true,
 				'isUpdateChecked' => true,
@@ -131,9 +134,14 @@ class AdminTest extends TestCase {
 				'notifyGroups' => [
 					['value' => 'admin', 'label' => 'Administrators'],
 				],
+				'withSettings' => $withSettings,
 			]),
+			'withSettings' => $withSettings,
 		];
+	}
 
+	public function testGetFormWithUpdate() {
+		$params = $this->mockFormParams(true);
 		$expected = new TemplateResponse('updatenotification', 'admin', $params, '');
 		$this->assertEquals($expected, $this->admin->getForm());
 	}
@@ -144,6 +152,6 @@ class AdminTest extends TestCase {
 	}
 
 	public function testGetPriority() {
-		$this->assertSame(1, $this->admin->getPriority());
+		$this->assertSame(90, $this->admin->getPriority());
 	}
 }
